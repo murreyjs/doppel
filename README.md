@@ -1,2 +1,216 @@
-# doppel
- A command-line tool that searches for files with duplicate names in a folder and its subfolders, then provides an interactive interface to remove duplicates.
+# Doppel - Duplicate File Eliminator
+
+A powerful command-line tool that finds and eliminates duplicate filenames in directory trees. Doppel provides an interactive interface for safely removing duplicates while giving you full control over what gets deleted.
+
+## Features
+
+- **Recursive Search** - Scans nested folders to find all duplicates
+- **Smart Detection** - Finds files with duplicate names (case-insensitive)
+- **Content Comparison** - Optional MD5 hash comparison for true duplicates
+- **Interactive Removal** - Safe, guided deletion with multiple options
+- **Detailed Information** - Shows file sizes, modification dates, and content hashes
+- **Safety First** - Confirmation prompts and dry-run mode
+- **Progress Tracking** - Shows space freed and files removed
+
+## Installation
+
+### Option 1: Using pipx (Recommended for CLI tools)
+```bash
+# Install pipx if you don't have it
+brew install pipx
+
+# Clone and install doppel
+git clone https://github.com/yourusername/doppel.git
+cd doppel
+pipx install -e .
+```
+
+### Option 2: Using Virtual Environment (Recommended for development)
+```bash
+git clone https://github.com/yourusername/doppel.git
+cd doppel
+
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install doppel
+pip install -e .
+```
+
+### Option 3: Using pip with --user flag
+```bash
+git clone https://github.com/yourusername/doppel.git
+cd doppel
+pip3 install -e . --user --break-system-packages
+```
+
+### Option 4: Using the installation script
+```bash
+git clone https://github.com/yourusername/doppel.git
+cd doppel
+chmod +x scripts/install.sh
+./scripts/install.sh
+```
+
+### When published to PyPI (future)
+```bash
+pipx install doppel  # or pip install doppel
+```
+
+## Quick Start
+
+```bash
+# Search current directory for duplicate filenames
+doppel
+
+# Search specific directory
+doppel /path/to/folder
+
+# Compare file content, not just names
+doppel --content ~/Documents
+
+# Preview duplicates without deleting anything
+doppel --dry-run .
+```
+
+## Usage
+
+### Basic Commands
+
+```bash
+doppel [directory] [options]
+```
+
+**Arguments:**
+- `directory` - Directory to search (default: current directory)
+
+**Options:**
+- `--content` - Compare file content using MD5 hashes (slower but more accurate)
+- `--dry-run` - Show duplicates without interactive removal
+- `--verbose` - Show detailed progress information
+- `--version` - Show version information
+- `--help` - Show help message
+
+### Interactive Removal
+
+When duplicates are found, doppel offers several options for each set:
+
+- **Enter numbers** (e.g., `2,3`) - Delete specific files by their index
+- **`a`** - Auto-keep newest file, delete all others
+- **`k`** - Keep all files (skip this set)
+- **`q`** - Quit the program
+
+### Example Session
+
+```
+$ doppel ~/Downloads --content
+
+Scanning directory: /home/user/Downloads
+Scan complete. Found 1,247 files.
+
+Found 3 sets of duplicate filenames (8 total files):
+============================================================
+
+Filename: document.pdf
+Found 3 copies:
+  1. /home/user/Downloads/document.pdf
+     Size: 2.1 MB, Modified: 1640995200
+  2. /home/user/Downloads/backup/document.pdf
+     Size: 2.1 MB, Modified: 1640995100
+  3. /home/user/Downloads/old/document.pdf
+     Size: 1.8 MB, Modified: 1640994000
+
+✓ All files have identical content
+
+Options:
+  Enter numbers (e.g., '2,3') to delete those files
+  'k' to keep all (skip)
+  'a' to auto-keep newest (delete others)
+  'q' to quit
+Choice: a
+
+Keeping newest: /home/user/Downloads/document.pdf
+Deleted: /home/user/Downloads/backup/document.pdf
+Deleted: /home/user/Downloads/old/document.pdf
+```
+
+## How It Works
+
+1. **Scanning** - Recursively walks through directory trees collecting filenames
+2. **Grouping** - Groups files by name (case-insensitive comparison)
+3. **Analysis** - Optionally compares file content using MD5 hashes
+4. **Display** - Shows duplicate sets with detailed file information
+5. **Interactive** - Guides you through safe removal with multiple options
+
+## Content vs Name Comparison
+
+### Name Comparison (Default)
+- Fast scanning
+- Finds files with identical names
+- Good for obvious duplicates like "photo.jpg" appearing in multiple folders
+
+### Content Comparison (`--content`)
+- Slower scanning (computes MD5 hashes)
+- Identifies files with identical content regardless of name
+- Perfect for finding true duplicates even if renamed
+- Shows which files have different content despite same name
+
+## Safety Features
+
+- **Confirmation prompts** before any deletion
+- **Dry-run mode** to preview without changes
+- **Detailed file information** to make informed decisions
+- **Error handling** for permission issues
+- **Space calculation** shows how much storage will be freed
+
+## Development
+
+### Setup Development Environment
+```bash
+git clone https://github.com/yourusername/doppel.git
+cd doppel
+pip install -e ".[dev]"
+```
+
+### Run Tests
+```bash
+pytest
+```
+
+### Code Formatting
+```bash
+black doppel/
+flake8 doppel/
+```
+
+### Type Checking
+```bash
+mypy doppel/
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Why "Doppel"?
+
+The name comes from "doppelganger" - German for "double walker" - which perfectly describes duplicate files that appear in multiple locations. It's short, memorable, and sounds like a legitimate CLI tool!
+
+## Changelog
+
+### v1.0.0
+- Initial release
+- Recursive duplicate filename detection
+- Interactive removal interface
+- Content comparison via MD5 hashing
+- Dry-run mode
+- Comprehensive safety features

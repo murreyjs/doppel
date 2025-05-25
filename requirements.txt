@@ -1,0 +1,9 @@
+# No external dependencies - doppel uses only Python standard library
+# This file is included for compatibility with pip-tools and similar workflows
+
+# Development dependencies (install with: pip install -r requirements-dev.txt)
+# pytest>=6.0
+# pytest-cov
+# black
+# flake8
+# mypy
